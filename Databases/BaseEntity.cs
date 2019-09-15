@@ -11,27 +11,27 @@ namespace Databases
         ///<summary>
         /// Get Or Set the Entity Identifier
         /// </summary>
-        public virtual Int64? Id { get; set; }
+        public virtual Int64 Id { get; set; }
 
         ///<summary>
-        /// Get Or Set the Entity CreatedBy
+        /// Get Or Set the Entity ModifiedBy
         /// </summary>
-        public virtual Int64? CreatedBy { get; set; }
+        public virtual Int64? ModifiedBy { get; set; }
 
         ///<summary>
-        /// Get Or Set the Entity CreatedOn
+        /// Get Or Set the Entity ModifiedOn
         /// </summary>
-        public virtual DateTime? CreatedOn { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
 
         ///<summary>
-        /// Get Or Set the Entity CreatedMacId
+        /// Get Or Set the Entity ModifiedMacId
         /// </summary>
-        public virtual string CreatedMacId { get; set; }
+        public virtual string ModifiedMacId { get; set; }
 
         ///<summary>
         /// Get Or Set the Entity Deleted
         /// </summary>
-        public virtual bool? Deleted { get; set; }
+        public virtual bool Deleted { get; set; }
 
         ///<summary>
         /// Get Or Set the Entity DeletedBy

@@ -32,7 +32,7 @@ namespace Databases
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             var Instances = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(type=>type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>))
+                .Where(type=> type.BaseType != null &&type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>))
                 .Select(type=>Activator.CreateInstance(type)).ToArray();
 
             foreach (dynamic Instance in Instances)
