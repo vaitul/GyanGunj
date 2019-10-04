@@ -1,4 +1,5 @@
-﻿using Databases.Domains;
+﻿using Databases;
+using Databases.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,17 @@ namespace Utilities
             {
                 if (_CurrentUser.Id == 0)
                     _CurrentUser = value;
+            }
+        }
+
+        private static MasterDatabase _MasterDatabase;
+        public static MasterDatabase MasterDatabase
+        {
+            get
+            {
+                if (_MasterDatabase == null)
+                    _MasterDatabase = new MasterDatabase();
+                return _MasterDatabase;
             }
         }
 

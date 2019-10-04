@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Databases.Domains;
 
 namespace Databases
 {
@@ -12,6 +14,21 @@ namespace Databases
         /// Get Or Set the Entity Identifier
         /// </summary>
         public virtual Int64 Id { get; set; }
+
+        ///<summary>
+        /// Get Or Set the Entity CreatedBy
+        /// </summary>
+        public virtual Int64? CreatedBy { get; set; }
+
+        ///<summary>
+        /// Get Or Set the Entity CreatedOn
+        /// </summary>
+        public virtual DateTime? CreatedOn { get; set; }
+
+        ///<summary>
+        /// Get Or Set the Entity CreatedMacId
+        /// </summary>
+        public virtual string CreatedMacId { get; set; }
 
         ///<summary>
         /// Get Or Set the Entity ModifiedBy
@@ -47,7 +64,6 @@ namespace Databases
         /// Get Or Set the Entity DeletedMacId
         /// </summary>
         public virtual string DeletedMacId { get; set; }
-
 
         //public override bool Equals(object obj)
         //{

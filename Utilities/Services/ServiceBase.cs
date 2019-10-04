@@ -55,7 +55,7 @@ namespace Utilities.Services
         {
             if (entity == null)
                 return;
-            EntityModified(entity);
+            EntityCreated(entity);
             _Repository.Insert(entity);
         }
         public void Insert(IEnumerable<T> entities)
@@ -63,7 +63,7 @@ namespace Utilities.Services
             if (entities == null)
                 return;
             foreach (T entity in entities)
-                EntityModified(entity);
+                EntityCreated(entity);
             _Repository.Insert(entities);
         }
         public void Update(T entity)
@@ -120,6 +120,12 @@ namespace Utilities.Services
             entity.ModifiedBy = Globals.CurrentUser.Id;
             entity.ModifiedOn = DateTime.Now;
             entity.ModifiedMacId = MacId;
+        }
+        private void EntityCreated(T entity)
+        {
+            entity.CreatedBy = Globals.CurrentUser.Id;
+            entity.CreatedOn = DateTime.Now;
+            entity.CreatedMacId = MacId;
         }
         private void EntityDeleted(T entity)
         {

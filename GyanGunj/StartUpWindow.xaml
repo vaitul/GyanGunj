@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GyanGunj"
         mc:Ignorable="d"
-        Title="LoginWindow" Padding="0" Margin="0" Height="280" Width="500" WindowStyle="None" WindowStartupLocation="CenterScreen" KeyUp="SomeKey_Pressed" x:Name="LogInWindow">
+        Title="LoginWindow" Padding="0" Margin="0" Height="280" Width="500" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyUp="SomeKey_Pressed" x:Name="LogInWindow">
 
     <Grid Margin="0">
         <Grid.RowDefinitions>

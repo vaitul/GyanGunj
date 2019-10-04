@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Utilities;
 
 namespace GyanGunj
 {
@@ -15,6 +16,7 @@ namespace GyanGunj
     {
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            Logger.LogError(e.Exception.ToString());
             Utilities.Globals.ShowError(e.Exception.GetType().FullName + " : " + e.Exception.Message, "Exception Handled By Globaly");
             e.Handled = true;
         }

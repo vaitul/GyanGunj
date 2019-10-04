@@ -16,7 +16,28 @@ namespace Databases
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
+                string DBType = ConfigurationManager.AppSettings.Get("Database");
+                string Provider = ConfigurationManager.AppSettings.Get("Provider");
+                bool IntegratedSecurity = bool.Parse(ConfigurationManager.AppSettings.Get("IntegratedSecurity"));
+
+                if (string.IsNullOrEmpty(DBType) || string.IsNullOrEmpty(Provider))
+                    throw new Exception("DBType or Provider not set");
+
+                string ConString = "";
+
+                if (DBType == "SQL")
+                {
+                    if (IntegratedSecurity)
+                        ConString = @"Data Source=" + Provider + ";Initial Catalog=GyanGunj;Integrated Security=True";
+                    else
+                    {
+                        string Username = ConfigurationManager.AppSettings.Get("Username");
+                        string Password = ConfigurationManager.AppSettings.Get("Password");
+                        ConString = @"Data Source=" + Provider + ";Initial Catalog=GyanGunj;User Id=" + Username + ";Password=" + Password + ";";
+                    }
+                }
+
+                return ConString;
             }
         }
 

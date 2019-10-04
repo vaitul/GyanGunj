@@ -1,6 +1,8 @@
 ﻿using Databases;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,42 +22,33 @@ using Utilities.Services;
 
 namespace GyanGunj
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
     public partial class StartUpWindow : Window
     {
         public StartUpWindow()
         {
             InitializeComponent();
-
-            LogInWindow.Loaded += StartStartupTask;           
+            LogInWindow.Loaded += StartStartupTask;
         }
 
         private async void StartStartupTask(object sender, RoutedEventArgs e)
         {
-            Statusbar.Text = "Starting...";
+            Statusbar.Text = "Loading Master Data...";
+
             await Task.Run(() =>
             {
-                Statusbar.Dispatcher.Invoke(() =>
+                if (!Globals.MasterDatabase.IsExist)
                 {
-                    Statusbar.Text = "Loading Database...";
-                });
-                Thread.Sleep(5000);
+                    Globals.MasterDatabase.Create();
+                }
             });
             Statusbar.Text = "Ready.";
-            //LogoGrid.SetValue(Grid.ColumnProperty, 1);
-
-            //MainWindow window = new MainWindow();
-            //window.Show();
-            //this.Close();
         }
 
         private void SomeKey_Pressed(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                if (Utilities.Globals.ShowQuestion("Are you sure to Exit ?", "Gyan Gunj") == MessageBoxResult.Yes)
+                //if (Utilities.Globals.ShowQuestion("Are you sure to Exit ?", "Gyan Gunj") == MessageBoxResult.Yes)
                     Application.Current.Shutdown();
             }
         }
