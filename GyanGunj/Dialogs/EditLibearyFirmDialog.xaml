@@ -1,0 +1,56 @@
+﻿<Window x:Class="GyanGunj.Dialogs.EditLibearyFirmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GyanGunj.Dialogs"
+        xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:ext="http://gyangunjlib.com/ControlExtensions"
+        mc:Ignorable="d"
+        BorderBrush="CornflowerBlue"
+        BorderThickness="3 3 3 3"
+        Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+            
+        <DockPanel Grid.Row="0">
+            <StackPanel DockPanel.Dock="Top" Height="30px" Background="CornflowerBlue">
+                <DockPanel>
+                    <TextBlock Margin="5 0 0 0" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="19" Text="{Binding Title}" />
+                </DockPanel>
+            </StackPanel>
+        </DockPanel>
+
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Library Name" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Address 1" VerticalAlignment="Center"/>
+            <TextBox Name="add1" Grid.Row="1" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Address 2" VerticalAlignment="Center"/>
+            <TextBox x:Name="add2" Grid.Row="2" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Address 3" VerticalAlignment="Center"/>
+            <TextBox x:Name="add3" Grid.Row="3" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
+
+        </Grid>      
+            
+    </Grid>
+</Window>

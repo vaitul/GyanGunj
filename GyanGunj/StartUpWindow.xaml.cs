@@ -1,4 +1,5 @@
 ﻿using Databases;
+using GyanGunj.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -34,13 +35,24 @@ namespace GyanGunj
         {
             Statusbar.Text = "Loading Master Data...";
 
+            bool IsMasterDBExist = Globals.MasterDatabase.IsExist;
             await Task.Run(() =>
             {
-                if (!Globals.MasterDatabase.IsExist)
+                if (!IsMasterDBExist)
                 {
                     Globals.MasterDatabase.Create();
                 }
             });
+
+            if(!IsMasterDBExist || true)
+            {
+                var FirmDialog = new EditLibearyFirmDialog();
+                FirmDialog.WindowStyle = WindowStyle.None;
+                FirmDialog.ShowInTaskbar = false;
+                FirmDialog.ShowDialog();
+            }
+
+
             Statusbar.Text = "Ready.";
         }
 
