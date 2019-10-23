@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Telerik.Windows.Controls;
 using Utilities;
 
 namespace GyanGunj
@@ -14,6 +15,10 @@ namespace GyanGunj
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            //StyleManager.ApplicationTheme= new MaterialTheme();
+        }
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Logger.LogError(e.Exception.ToString());

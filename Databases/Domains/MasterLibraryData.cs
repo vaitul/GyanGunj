@@ -19,7 +19,7 @@ namespace Databases.Domains
         public string State { get; set; }
         public string Country { get; set; }
         public string Website { get; set; }
-        public string FolderName { get; set; }
+        //public string FolderName { get; set; }
 
     }
 }

@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Databases
@@ -33,6 +34,13 @@ namespace Databases
             set
             {
                 _Attributes = value;
+            }
+        }
+        public MasterLibraryData Library
+        {
+            get
+            {
+                return LibraryData.OrderByDescending(x => x.Id).FirstOrDefault();
             }
         }
         private IList<MasterLibraryData> _LibraryData { get; set; }
@@ -79,9 +87,7 @@ namespace Databases
                         [Id] integer PRIMARY KEY, 
                         [Name] varchar(80) NULL, 
                         [Type] varchar(20) NULL, 
-                        [Value] varchar(50) NULL,
-                        [ValidFrom] DateTime NULL, 
-                        [ValidTo] DateTime NULL
+                        [Value] varchar(50) NULL
                     )",
                     @"CREATE TABLE IF NOT EXISTS LibraryData (
                         [Id] integer PRIMARY KEY, 
@@ -94,8 +100,7 @@ namespace Databases
                         [City] varchar(100) NULL, 
                         [State] varchar(100) NULL, 
                         [Country] varchar(100) NULL,
-                        [Website] varchar(50) NULL, 
-                        [FolderName] varchar(20) NULL
+                        [Website] varchar(50) NULL
                     )",
                 };
 
@@ -144,17 +149,16 @@ namespace Databases
                 LibraryData.Add(new MasterLibraryData()
                 {
                     Id = dr.GetInt32(0),
-                    Name = dr.GetString(1),
-                    Address = dr.GetString(2),
-                    Email = dr.GetString(3),
-                    Mobile = dr.GetString(4),
-                    Phone = dr.GetString(5),
-                    PinCode = dr.GetString(6),
-                    City = dr.GetString(7),
-                    State = dr.GetString(8),
-                    Country = dr.GetString(9),
+                    Name = dr.GetString(1),//
+                    Address = dr.GetString(2),//
+                    Email = dr.GetString(3),//
+                    Mobile = dr.GetString(4),//
+                    Phone = dr.GetString(5),//
+                    PinCode = dr.GetString(6),//
+                    City = dr.GetString(7),//
+                    State = dr.GetString(8),//
+                    Country = dr.GetString(9),//
                     Website = dr.GetString(10),
-                    FolderName = dr.GetString(11)
                 });
             }
 
@@ -166,7 +170,27 @@ namespace Databases
                 return;
             Connection.Open();
             SQLiteCommand cmd;
-            cmd = new SQLiteCommand(string.Format("INSERT INTO Attributes VALUES(null,'{1}','{2}','{3}','{4}','{5}')", entity.Id, entity.Name, entity.Type, entity.Value, entity.ValidFrom, entity.ValidTo), Connection);
+            cmd = new SQLiteCommand(string.Format("INSERT INTO Attributes VALUES(null,'{1}','{2}','{3}')", entity.Id, Regex.Replace(entity.Name, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Type, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Value, @"[^0-9a-zA-Z]+", "")), Connection);
+            cmd.ExecuteNonQuery();
+            Connection.Close();
+        }
+        public void Update(MasterAttribute entity)
+        {
+            if (!IsExist || entity.Id>0)
+                return;
+            Connection.Open();
+            SQLiteCommand cmd;
+            cmd = new SQLiteCommand(string.Format("UPDATE Attributes SET Name='{1}',Type='{2}',Value='{3}' WHERE Id={0}", entity.Id, Regex.Replace(entity.Name, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Type, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Value, @"[^0-9a-zA-Z]+", "")), Connection);
+            cmd.ExecuteNonQuery();
+            Connection.Close();
+        }
+        public void DeleteAttr(int id)
+        {
+            if (!IsExist || id<=0)
+                return;
+            Connection.Open();
+            SQLiteCommand cmd;
+            cmd = new SQLiteCommand(string.Format("DELETE FROM Attributes WHERE Id={0}", id),Connection);
             cmd.ExecuteNonQuery();
             Connection.Close();
         }
@@ -178,7 +202,7 @@ namespace Databases
             SQLiteCommand cmd;
             foreach (var entity in entities)
             {
-                cmd = new SQLiteCommand(string.Format("INSERT INTO Attributes VALUES(null,'{1}','{2}','{3}','{4}','{5}')", entity.Id, entity.Name, entity.Type, entity.Value, entity.ValidFrom, entity.ValidTo), Connection);
+                cmd = new SQLiteCommand(string.Format("INSERT INTO Attributes VALUES(null,'{1}','{2}','{3}')", entity.Id, Regex.Replace(entity.Name, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Type, @"[^0-9a-zA-Z]+", ""), Regex.Replace(entity.Value, @"[^0-9a-zA-Z]+", "")), Connection);
                 cmd.ExecuteNonQuery(); ;
             }
             Connection.Close();
@@ -189,7 +213,7 @@ namespace Databases
                 return;
             Connection.Open();
             SQLiteCommand cmd;
-            cmd = new SQLiteCommand(string.Format("INSERT INTO LibraryData VALUES(null,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}')", entity.Id, entity.Name, entity.Address, entity.Email, entity.Mobile, entity.Phone, entity.PinCode, entity.City, entity.State, entity.Country, entity.Website, entity.FolderName), Connection);
+            cmd = new SQLiteCommand(string.Format("INSERT INTO LibraryData VALUES(null,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')", entity.Id, entity.Name, entity.Address, entity.Email, entity.Mobile, entity.Phone, entity.PinCode, entity.City, entity.State, entity.Country, entity.Website), Connection);
             cmd.ExecuteNonQuery();
             Connection.Close();
         }
@@ -201,7 +225,7 @@ namespace Databases
             SQLiteCommand cmd;
             foreach (var entity in entities)
             {
-                cmd = new SQLiteCommand(string.Format("INSERT INTO LibraryData VALUES(null,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}')", entity.Id, entity.Name, entity.Address, entity.Email, entity.Mobile, entity.Phone, entity.PinCode, entity.City, entity.State, entity.Country, entity.Website, entity.FolderName), Connection);
+                cmd = new SQLiteCommand(string.Format("INSERT INTO LibraryData VALUES(null,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')", entity.Id, entity.Name, entity.Address, entity.Email, entity.Mobile, entity.Phone, entity.PinCode, entity.City, entity.State, entity.Country, entity.Website), Connection);
                 cmd.ExecuteNonQuery();
             }
             Connection.Close();

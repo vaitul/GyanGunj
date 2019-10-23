@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Telerik.Windows.Controls;
 
 namespace GyanGunj.ControlExtensions
 {
     public class Focus
     {
-
-
         public static string GetNext(DependencyObject obj)
         {
             return (string)obj.GetValue(NextProperty);
@@ -66,16 +66,50 @@ namespace GyanGunj.ControlExtensions
         {
             if (e.Key != Key.Enter && e.Key != Key.Return)
                 return;
+
+            bool doFocus = true;
+
             if (!(sender is FrameworkElement element))
                 return;
+            if (element is TextBox txtbox)
+            {
+                txtbox.Text = txtbox.Text.Trim(new char[]{ ' ','\r'});
+                txtbox.CaretIndex = txtbox.Text.Length;
+                if (txtbox.AcceptsReturn && txtbox.Text.Length > 0)
+                    if (txtbox.Text[txtbox.Text.Length - 1] != '\n')
+                        doFocus = false;
+                    else
+                    {
+                        txtbox.Text = txtbox.Text.Substring(0, txtbox.Text.Length - 1);
+                        txtbox.CaretIndex = txtbox.Text.Length-1;
+                    }
+            }
+
             var FocusTo = GetNext(element);
             if (string.IsNullOrWhiteSpace(FocusTo))
                 return;
             if (VisualTreeHelper.GetParent(element) is FrameworkElement parent && parent.FindName(FocusTo) is FrameworkElement focusToElement)
-                focusToElement.Focus();
+            {
+                if (focusToElement is TextBox Totxtbox)
+                {
+                    if (Totxtbox.AcceptsReturn)
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else if (focusToElement is RadGridView grid && grid.CanUserInsertRows)
+                {
+                    GyanGunj.Common.GridUtils.BeginRowEditing(grid, grid.Items.Count - 1);
+                }
+
+                if (doFocus)
+                    focusToElement.Focus();
+            }
         }
+
         private static void FocusPrevious(object sender, KeyEventArgs e)
         {
+            e.Handled = true;
             if (e.Key != Key.Tab || e.KeyboardDevice.Modifiers != ModifierKeys.Shift)
                 return;
             if (!(sender is FrameworkElement element))

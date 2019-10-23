@@ -2,6 +2,7 @@
 using GyanGunj.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -29,8 +30,8 @@ namespace GyanGunj
         {
             InitializeComponent();
             LogInWindow.Loaded += StartStartupTask;
+            this.ShowInTaskbar = false;
         }
-
         private async void StartStartupTask(object sender, RoutedEventArgs e)
         {
             Statusbar.Text = "Loading Master Data...";
@@ -44,7 +45,7 @@ namespace GyanGunj
                 }
             });
 
-            if(!IsMasterDBExist || true)
+            if (!IsMasterDBExist || (IsMasterDBExist && Globals.MasterDatabase.Library == null) || true)
             {
                 var FirmDialog = new EditLibearyFirmDialog();
                 FirmDialog.WindowStyle = WindowStyle.None;
@@ -61,7 +62,7 @@ namespace GyanGunj
             if (e.Key == Key.Escape)
             {
                 //if (Utilities.Globals.ShowQuestion("Are you sure to Exit ?", "Gyan Gunj") == MessageBoxResult.Yes)
-                    Application.Current.Shutdown();
+                Application.Current.Shutdown();
             }
         }
     }

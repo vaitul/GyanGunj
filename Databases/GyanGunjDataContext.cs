@@ -18,22 +18,24 @@ namespace Databases
             {
                 string DBType = ConfigurationManager.AppSettings.Get("Database");
                 string Provider = ConfigurationManager.AppSettings.Get("Provider");
+                string DBName = ConfigurationManager.AppSettings.Get("DBName");
+
                 bool IntegratedSecurity = bool.Parse(ConfigurationManager.AppSettings.Get("IntegratedSecurity"));
 
                 if (string.IsNullOrEmpty(DBType) || string.IsNullOrEmpty(Provider))
-                    throw new Exception("DBType or Provider not set");
+                    throw new Exception("DBType or Provider not specified");
 
                 string ConString = "";
 
                 if (DBType == "SQL")
                 {
                     if (IntegratedSecurity)
-                        ConString = @"Data Source=" + Provider + ";Initial Catalog=GyanGunj;Integrated Security=True";
+                        ConString = @"Data Source=" + Provider + ";Initial Catalog=" + DBName + ";Integrated Security=True";
                     else
                     {
                         string Username = ConfigurationManager.AppSettings.Get("Username");
                         string Password = ConfigurationManager.AppSettings.Get("Password");
-                        ConString = @"Data Source=" + Provider + ";Initial Catalog=GyanGunj;User Id=" + Username + ";Password=" + Password + ";";
+                        ConString = @"Data Source=" + Provider + ";Initial Catalog=" + DBName + ";User Id=" + Username + ";Password=" + Password + ";";
                     }
                 }
 
@@ -42,19 +44,19 @@ namespace Databases
         }
 
         public GyanGunjDataContext()
-            :base(ConnectionString)
+            : base(ConnectionString)
         {
         }
         public GyanGunjDataContext(string NameOrConnectionString)
-            :base(NameOrConnectionString)
+            : base(NameOrConnectionString)
         {
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             var Instances = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(type=> type.BaseType != null &&type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>))
-                .Select(type=>Activator.CreateInstance(type)).ToArray();
+                .Where(type => type.BaseType != null && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>))
+                .Select(type => Activator.CreateInstance(type)).ToArray();
 
             foreach (dynamic Instance in Instances)
                 modelBuilder.Configurations.Add(Instance);

@@ -1,24 +1,34 @@
 ﻿<Window x:Class="GyanGunj.Dialogs.EditLibearyFirmDialog"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GyanGunj.Dialogs"
-        xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:ext="http://gyangunjlib.com/ControlExtensions"
+        xmlns:mahapps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:ext="clr-namespace:GyanGunj.ControlExtensions"
+        xmlns:common="clr-namespace:GyanGunj.Common"
         mc:Ignorable="d"
-        BorderBrush="CornflowerBlue"
+        BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="3 3 3 3"
-        Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+        x:Name="CurrentWindow"
+        Title="{Binding Title}" Height="520" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="TextBox" 
+               BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="CharacterCasing" Value="Upper"/>
+        </Style>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-            
+
         <DockPanel Grid.Row="0">
-            <StackPanel DockPanel.Dock="Top" Height="30px" Background="CornflowerBlue">
+            <StackPanel DockPanel.Dock="Top" Height="30px" Background="{DynamicResource ResourceKey=AccentColorBrush}">
                 <DockPanel>
                     <TextBlock Margin="5 0 0 0" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="19" Text="{Binding Title}" />
                 </DockPanel>
@@ -32,25 +42,174 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Library Name" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Address 1" VerticalAlignment="Center"/>
-            <TextBox Name="add1" Grid.Row="1" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="0" 
+                   VerticalAlignment="Center">
+                <TextBlock>
+                    <Run Text="Library Name" FontWeight="Bold"/>
+                    <InlineUIContainer>
+                        <TextBlock Text="*" Foreground="Red"/>
+                    </InlineUIContainer>
+                </TextBlock>
+            </Label>
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" x:Name="LibName"
+                     mahapps:TextBoxHelper.Watermark="Enter Library Name"
+                     CharacterCasing="Upper"
+                     Width="673" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="18"
+                     Text="{Binding Name,Mode=TwoWay}"
+                     ext:Focus.Next="Address"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Address 2" VerticalAlignment="Center"/>
-            <TextBox x:Name="add2" Grid.Row="2" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
+            <Label Grid.Row="1" Grid.Column="0" 
+                   VerticalAlignment="Top"
+                   Content="Address" FontWeight="Bold"/>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="Address"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter Adress" AcceptsReturn="True" Height="60"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14" VerticalContentAlignment="Top"
+                     Text="{Binding Address,Mode=TwoWay}"
+                     ext:Focus.Next="Country"/>
 
-            <Label Grid.Row="3" Grid.Column="0" Content="Address 3" VerticalAlignment="Center"/>
-            <TextBox x:Name="add3" Grid.Row="3" Grid.Column="1" Width="200" FontWeight="Bold" Margin="0 5" VerticalAlignment="Center" />
+            <Label Grid.Row="2" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="Country" FontWeight="Bold"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" x:Name="Country"
+                      Margin="0 5" VerticalAlignment="Center" FontSize="16" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select Country"
+                      ItemsSource="{Binding Countries}"
+                      SelectedItem="{Binding Country,Mode=TwoWay}"
+                      SelectedIndex="0"
+                      ext:Focus.Next="State"/>
 
-        </Grid>      
-            
+            <Label Grid.Row="3" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Content="State" FontWeight="Bold"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" x:Name="State"
+                      Margin="0 5" VerticalAlignment="Center" FontSize="16" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select State"
+                      ItemsSource="{Binding States}"
+                      SelectedIndex="0"
+                      SelectedItem="{Binding State,Mode=TwoWay}"
+                      ext:Focus.Next="City"/>
+
+            <Label Grid.Row="4" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   FontWeight="Bold">
+                <TextBlock>
+                    <Run Text="City" FontWeight="Bold"/>
+                    <InlineUIContainer>
+                        <TextBlock Text="*" Foreground="Red"/>
+                    </InlineUIContainer>
+                </TextBlock>
+            </Label>
+            <TextBox Grid.Row="4" Grid.Column="1" x:Name="City"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter City"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding City,Mode=TwoWay}"
+                     ext:Focus.Next="PinCode"/>
+
+            <Label Grid.Row="5" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="PinCode" FontWeight="Bold"/>
+            <TextBox Grid.Row="5" Grid.Column="1" x:Name="PinCode"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter PinCode"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding PinCode,Mode=TwoWay}"
+                     ext:Focus.Next="Phone"/>
+
+            <Label Grid.Row="6" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="Phone" FontWeight="Bold"/>
+            <TextBox Grid.Row="6" Grid.Column="1" x:Name="Phone"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter Phone Number" TextWrapping="Wrap"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding Phone,Mode=TwoWay}"
+                     ext:Focus.Next="Mobile"/>
+
+            <Label Grid.Row="7" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="Mobile" FontWeight="Bold"/>
+            <TextBox Grid.Row="7" Grid.Column="1" x:Name="Mobile"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter Mobile Number" TextWrapping="Wrap"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding Mobile,Mode=TwoWay}"
+                     ext:Focus.Next="Email"/>
+
+            <Label Grid.Row="8" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="Email" FontWeight="Bold"/>
+            <TextBox Grid.Row="8" Grid.Column="1" x:Name="Email"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter Email Address" TextWrapping="Wrap"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding Email,Mode=TwoWay}"
+                     ext:Focus.Next="WebSite"/>
+
+            <Label Grid.Row="9" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Content="WebSite" FontWeight="Bold"/>
+            <TextBox Grid.Row="9" Grid.Column="1" x:Name="WebSite"
+                     CharacterCasing="Upper"
+                     mahapps:TextBoxHelper.Watermark="Enter WebSite Address" TextWrapping="Wrap"
+                     Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
+                     Text="{Binding WebSite,Mode=TwoWay}"
+                     ext:Focus.Next="AttributeGrid"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="9"
+                        Margin="5">
+                <TextBlock 
+                    Background="{DynamicResource AccentColorBrush}" Padding="2" FontWeight="DemiBold" Foreground="White" FontSize="14"
+                    Text="Other Attributes" />
+                <telerik:RadGridView x:Name="AttributeGrid"
+                    Margin="0 2 0 0" Height="330" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
+                    ShowGroupPanel="False"
+                    AutoGenerateColumns="False"
+                    CanUserInsertRows="True"
+                    RowIndicatorVisibility="Collapsed"
+                    telerik:StyleManager.Theme="Office_Blue"
+                    IsFilteringAllowed="False"
+                    ItemsSource="{Binding Attributes,Mode=TwoWay}">
+                    <telerik:RadGridView.Columns>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Name" Width="1*"/>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Type}" Header="Type" Width="1*"/>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" Width="2*"/>
+                    </telerik:RadGridView.Columns>
+                </telerik:RadGridView>
+            </StackPanel>
+
+
+            <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3"
+                        Margin="0 20 0 0" HorizontalAlignment="Right" Orientation="Horizontal" >
+
+                <Button Margin="8 0"
+                        FontSize="12" Width="89" Padding="2" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
+                        mahapps:ButtonHelper.CornerRadius="0"
+                        Command="{Binding SaveCommand}"
+                        Content="SAVE"/>
+
+                <Button Margin="0 0 8 0"
+                        FontSize="12" Width="89" Padding="5" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
+                        mahapps:ButtonHelper.CornerRadius="0"
+                        Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding ElementName=CurrentWindow}"
+                        Content="Cancel" />
+        
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>

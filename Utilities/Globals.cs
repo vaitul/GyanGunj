@@ -39,15 +39,15 @@ namespace Utilities
         }
 
 
-        public static void ShowInformation(string Text, string Titile = "Gyan Gunj")
+        public static void ShowInformation(string Text, string Titile = "GyanGunj Library Management System")
         {
             MessageBox.Show(Text, Titile, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
         }
-        public static void ShowError(string Text, string Titile = "Gyan Gunj")
+        public static void ShowError(string Text, string Titile = "GyanGunj Library Management System")
         {
             MessageBox.Show(Text, Titile, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
         }
-        public static MessageBoxResult ShowQuestion(string Text, string Titile = "Gyan Gunj", MessageBoxButton Btns = MessageBoxButton.YesNo, MessageBoxResult DefaultBtn = MessageBoxResult.Yes)
+        public static MessageBoxResult ShowQuestion(string Text, string Titile = "GyanGunj Library Management System", MessageBoxButton Btns = MessageBoxButton.YesNo, MessageBoxResult DefaultBtn = MessageBoxResult.Yes)
         {
             return MessageBox.Show(Text, Titile, Btns, MessageBoxImage.Question, DefaultBtn);
         }
