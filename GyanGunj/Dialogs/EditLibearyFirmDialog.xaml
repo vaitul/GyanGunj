@@ -188,6 +188,9 @@
                         <telerik:GridViewDataColumn DataMemberBinding="{Binding Type}" Header="Type" Width="1*"/>
                         <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" Width="2*"/>
                     </telerik:RadGridView.Columns>
+                    <telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding EventName="RowEditEnded" Command="{Binding AttrRowEditingEndedCommand}" CommandParameter="{Binding ElementName=AttributeGrid}"/>
+                    </telerik:EventToCommandBehavior.EventBindings>
                 </telerik:RadGridView>
             </StackPanel>
 

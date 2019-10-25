@@ -17,7 +17,7 @@ namespace GyanGunj
     {
         public App()
         {
-            //StyleManager.ApplicationTheme= new MaterialTheme();
+            StyleManager.ApplicationTheme = new MaterialTheme();
         }
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {

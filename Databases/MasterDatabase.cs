@@ -176,7 +176,7 @@ namespace Databases
         }
         public void Update(MasterAttribute entity)
         {
-            if (!IsExist || entity.Id>0)
+            if (!IsExist || entity.Id<1)
                 return;
             Connection.Open();
             SQLiteCommand cmd;

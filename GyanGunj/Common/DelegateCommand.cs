@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 namespace GyanGunj.Common
 {
+#pragma warning disable CS0067
     public class DelegateCommand : ICommand
     {
         private Action<object> Action;

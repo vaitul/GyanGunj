@@ -31,10 +31,12 @@ namespace GyanGunj.ViewModels
             this.Attributes = new ObservableCollection<Databases.Domains.MasterAttribute>(Globals.MasterDatabase.Attributes);
             this.Attributes.Add(new Databases.Domains.MasterAttribute());
             this.Attributes.CollectionChanged += Attributes_CollectionChanged;
+
             this.DialogMode = dialogMode;
 
             this._SaveCommand = new DelegateCommand(Save);
             this._CancelCommand = new DelegateCommand(Cancel, CanCancelExecue);
+            this._AttrRowEditingEndedCommand = new DelegateCommand(AttrRowEditEnded);
 
             //exteranl things
             this.Countries = new List<string>() { "INDIA" };
@@ -60,6 +62,15 @@ namespace GyanGunj.ViewModels
             get
             {
                 return _CancelCommand;
+            }
+        }
+
+        private DelegateCommand _AttrRowEditingEndedCommand;
+        public ICommand AttrRowEditingEndedCommand
+        {
+            get
+            {
+                return _AttrRowEditingEndedCommand;
             }
         }
 
@@ -212,10 +223,17 @@ namespace GyanGunj.ViewModels
             {
                 var entity = this.ToEntity();
                 Globals.MasterDatabase.Insert(entity);
+
                 var attr = Attributes.Where(x => x.Id.GetValueOrDefault() == 0 && !string.IsNullOrEmpty(x.Name?.Trim()) && !string.IsNullOrEmpty(x.Value?.Trim()));
                 if (attr?.Any() == true)
                 {
                     Globals.MasterDatabase.Insert(attr);
+                }
+
+                var updatedAttrs = Attributes.Where(x => EditedRowsId.Contains(x.Id.GetValueOrDefault()));
+                foreach(var item in updatedAttrs)
+                {
+                    Globals.MasterDatabase.Update(item);
                 }
             }
         }
@@ -232,11 +250,22 @@ namespace GyanGunj.ViewModels
         {
             if (string.IsNullOrEmpty(this.Name?.Trim()) || string.IsNullOrEmpty(this.City?.Trim()))
             {
-                Globals.ShowError("Library Name, City and Folder/Database name must required !");
+                Globals.ShowError("Library Name and City must required !");
                 return false;
             }
             return true;
         }
+
+        HashSet<int> EditedRowsId = new HashSet<int>();
+        private void AttrRowEditEnded(object parameter)
+        {
+            var row = (parameter as Telerik.Windows.Controls.RadGridView).SelectedItem as Databases.Domains.MasterAttribute;
+
+            if (row.Id > 0)
+                EditedRowsId.Add(row.Id.GetValueOrDefault());
+            return;
+        }
+
         #endregion
     }
 }
