@@ -7,13 +7,17 @@ using System.Windows.Input;
 
 namespace GyanGunj.Common
 {
-#pragma warning disable CS0067
+//#pragma warning disable CS0067
     public class DelegateCommand : ICommand
     {
         private Action<object> Action;
         private Predicate<object> canExec;
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public DelegateCommand(Action<object> action,Predicate<object> canexec = null)
         {
@@ -22,7 +26,7 @@ namespace GyanGunj.Common
             if (canexec != null)
                 this.canExec = canexec;
         }
-
+        
         public bool CanExecute(object parameter)
         {
             if (this.canExec != null)

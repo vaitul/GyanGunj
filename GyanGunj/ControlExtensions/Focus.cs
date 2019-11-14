@@ -71,6 +71,7 @@ namespace GyanGunj.ControlExtensions
 
             if (!(sender is FrameworkElement element))
                 return;
+            //for textboc has except return
             if (element is TextBox txtbox)
             {
                 txtbox.Text = txtbox.Text.Trim(new char[]{ ' ','\r'});

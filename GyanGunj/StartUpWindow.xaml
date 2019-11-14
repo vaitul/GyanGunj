@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GyanGunj"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="LoginWindow" Padding="0" Margin="0" Height="280" Width="500" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyUp="SomeKey_Pressed" x:Name="LogInWindow">
+        Title="GyanGunj Library Management System" Padding="0" Margin="0" Height="280" Width="500" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyUp="SomeKey_Pressed" x:Name="LogInWindow">
 
     <Grid Margin="0">
         <Grid.RowDefinitions>
@@ -21,20 +23,28 @@
         <Image Source="/Images/BG2.jfif" Grid.ColumnSpan="2" Margin="{Binding margin}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="278" Grid.Row="0"/>
 
 
-        <Grid Grid.Row="0" VerticalAlignment="Center" x:Name="LogoGrid">
+        <Grid Grid.Row="0" VerticalAlignment="Center" x:Name="LogoGrid" Visibility="Visible">
             <Image Source="/Images/Logo_Medium.png" Width="250"/>
-            <Label Content="Library Management" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="16"/>
+            <Label Content="Library Management System" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="16"/>
         </Grid>
-        <!--<Grid Grid.Row="0" Margin="10" VerticalAlignment="Center">
+        
+        <Grid Grid.Row="0" Margin="10" Visibility="Collapsed">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition />
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ComboBox>
-                <ComboBoxItem Content="Lang Rajkot"/>
-            </ComboBox>
-            <TextBox Grid.Row="1" Margin="5" FontSize="13pt" Padding="1" Background="Transparent"/>
-        </Grid>-->
+            <Image Grid.Row="0" Source="/Images/Logo_Medium.png" Margin="0"/>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <ComboBox x:Name="Users" Width="250" Height="25" Margin="0 5" telerik:StyleManager.Theme="Fluent" Background="Transparent" BorderBrush="#CCC">
+                    <ComboBoxItem>VAITUL</ComboBoxItem>
+                    <ComboBoxItem>SAM</ComboBoxItem>
+                    <ComboBoxItem>BHAYANI</ComboBoxItem>
+                </ComboBox>
+                <telerik:RadPasswordBox ShowPasswordButtonVisibility="Always" Name="Password" Width="250" Height="25" Margin="0 5" telerik:StyleManager.Theme="Fluent"/>
+                <telerik:RadButton x:Name="LogInBtn" Content="LogIn" Width="100" telerik:StyleManager.Theme="Fluent" Margin="10"/>
+            </StackPanel>
+        </Grid>
 
         <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="Transparent" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
@@ -44,7 +54,6 @@
 
             <TextBlock Padding="1" x:Name="Statusbar"/>
             <TextBlock HorizontalAlignment="Right" Text="By Vaitul Bhayani" Padding="2" Grid.Column="1"/>
-
         </Grid>
 
     </Grid>

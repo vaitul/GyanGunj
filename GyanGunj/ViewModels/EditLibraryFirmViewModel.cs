@@ -2,26 +2,37 @@
 using GyanGunj.Dialogs;
 using GyanGunj.Enums;
 using GyanGunj.Extensions;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Utilities;
 
 namespace GyanGunj.ViewModels
 {
+    public enum Windows
+    {
+        DataWindow = 1,
+        LogoWindow,
+        AdminWindow
+    }
     public class EditLibraryFirm : BaseViewModel
     {
         #region Control Related Fields
-
         public string Title { get; set; }
-        //public Visibility CancelButtonVisibility { get; set; }
-        public bool FolderNameIsReadOnly { get; set; }
-
+        public string SaveButtonContent { get; set; }
+        public Visibility DataWindowVisibility { get; set; }
+        public Visibility LogoWindowVisibility { get; set; }
+        public Visibility AdminWindowVisibility { get; set; }
+        public ImageSource LogoImageSource { get; set; }
         #endregion
 
         #region Ctor
@@ -32,16 +43,22 @@ namespace GyanGunj.ViewModels
             this.Attributes.Add(new Databases.Domains.MasterAttribute());
             this.Attributes.CollectionChanged += Attributes_CollectionChanged;
 
-            this.DialogMode = dialogMode;
-
             this._SaveCommand = new DelegateCommand(Save);
+            this._PreviousCommand = new DelegateCommand(Previous,CanPreviousExecue);
             this._CancelCommand = new DelegateCommand(Cancel, CanCancelExecue);
             this._AttrRowEditingEndedCommand = new DelegateCommand(AttrRowEditEnded);
+            this._AddLogoCommand = new DelegateCommand(AddLogo);
+
+            this.DialogMode = dialogMode;
+            this.ActiveWindow = Windows.DataWindow;
+
+            //LogoImageSource = new ImageSource("/Images/Logo_Only_Large.png");
 
             //exteranl things
             this.Countries = new List<string>() { "INDIA" };
             this.States = new List<string>() { "GUJARAT" };
         }
+
 
         #endregion
 
@@ -64,6 +81,14 @@ namespace GyanGunj.ViewModels
                 return _CancelCommand;
             }
         }
+        private DelegateCommand _PreviousCommand;
+        public ICommand PreviousCommand
+        {
+            get
+            {
+                return _PreviousCommand;
+            }
+        }
 
         private DelegateCommand _AttrRowEditingEndedCommand;
         public ICommand AttrRowEditingEndedCommand
@@ -74,40 +99,84 @@ namespace GyanGunj.ViewModels
             }
         }
 
+        private DelegateCommand _AddLogoCommand;
+        public ICommand AddLogoCommand
+        {
+            get
+            {
+                return _AddLogoCommand;
+            }
+        }
+
         #endregion
 
         #region Properties
 
-        private DialogModes _DialogMode;
-        public DialogModes DialogMode
+        private Byte[] _ImageLogo;
+        public Byte[] ImageLogo
         {
-            get { return _DialogMode; }
+            get { return _ImageLogo; }
+            set { _ImageLogo = value; }
+        }
+
+
+        public DialogModes DialogMode { get; set; }
+
+        private Windows _ActiveWindow;
+        public Windows ActiveWindow
+        {
+            get { return _ActiveWindow; }
             set
             {
-                _DialogMode = value;
-                if (_DialogMode == DialogModes.New)
+                _ActiveWindow = value;
+                if (value == Windows.DataWindow)
                 {
-                    this.Title = "Fill Library Firm Data";
-                    //this.CancelButtonVisibility = Visibility.Collapsed;
-                    this.FolderNameIsReadOnly = false;
+                    DataWindowVisibility = Visibility.Visible;
+                    LogoWindowVisibility = Visibility.Collapsed;
+                    AdminWindowVisibility = Visibility.Collapsed;
+                    if (DialogMode == DialogModes.New)
+                    {
+                        this.Title = "Fill Library Firm Data";
+                    }
+                    else
+                    {
+                        this.Title = "Edit Library Firm Data";
+                    }
+                    SaveButtonContent = "NEXT";
                 }
-                else if (_DialogMode == DialogModes.Edit)
+                else if (value == Windows.LogoWindow)
                 {
-                    this.Title = "Editing Library Firm Data";
-                    //this.CancelButtonVisibility = Visibility.Visible;
-                    this.FolderNameIsReadOnly = true;
+                    DataWindowVisibility = Visibility.Collapsed;
+                    LogoWindowVisibility = Visibility.Visible;
+                    AdminWindowVisibility = Visibility.Collapsed;
+                    if (DialogMode == DialogModes.New)
+                    {
+                        this.Title = "Add Library Logo";
+                        SaveButtonContent = "Next";
+                    }
+                    else
+                    {
+                        this.Title = "Change Library Logo";
+                        SaveButtonContent = "SAVE";
+                    }
                 }
-                else
+                else if (value == Windows.AdminWindow)
                 {
-                    this.Title = "Library Firm Data";
-                    //this.CancelButtonVisibility = Visibility.Visible;
-                    this.FolderNameIsReadOnly = true;
+                    DataWindowVisibility = Visibility.Collapsed;
+                    LogoWindowVisibility = Visibility.Collapsed;
+                    AdminWindowVisibility = Visibility.Visible;
+
+                    this.Title = "Add Library Admin";
+                    SaveButtonContent = "SAVE";
                 }
                 OnPropertyChanged("Title");
-                OnPropertyChanged("CancelButtonVisibility");
-                OnPropertyChanged("FolderNameIsReadOnly");
+                OnPropertyChanged("DataWindowVisibility");
+                OnPropertyChanged("LogoWindowVisibility");
+                OnPropertyChanged("AdminWindowVisibility");
+                OnPropertyChanged("SaveButtonContent");
             }
         }
+
 
         private string _Name;
         public string Name
@@ -201,26 +270,40 @@ namespace GyanGunj.ViewModels
         }
 
 
-
         #endregion
 
         #region Methods
 
         private void Attributes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                if(e.OldItems[0] is Databases.Domains.MasterAttribute attr)
+                if (e.OldItems[0] is Databases.Domains.MasterAttribute attr)
                 {
                     Globals.MasterDatabase.DeleteAttr(attr.Id.GetValueOrDefault());
                 }
             }
+        }
+        
+        private bool CanPreviousExecue(object obj)
+        {
+            return ActiveWindow != Windows.DataWindow;
+        }
+        public void Previous(object param)
+        {
+            ActiveWindow -= 1;
         }
 
         public void Save(object parameter)
         {
             if (this.Validate())
             {
+                if (SaveButtonContent != "SAVE")
+                {
+                    ActiveWindow += 1;
+                    return;
+                }
+
                 var entity = this.ToEntity();
                 Globals.MasterDatabase.Insert(entity);
 
@@ -231,10 +314,12 @@ namespace GyanGunj.ViewModels
                 }
 
                 var updatedAttrs = Attributes.Where(x => EditedRowsId.Contains(x.Id.GetValueOrDefault()));
-                foreach(var item in updatedAttrs)
+                foreach (var item in updatedAttrs)
                 {
                     Globals.MasterDatabase.Update(item);
                 }
+                if (parameter is EditLibearyFirmDialog control)
+                    control.Close();
             }
         }
         private bool CanCancelExecue(object parameter)
@@ -255,13 +340,32 @@ namespace GyanGunj.ViewModels
             }
             return true;
         }
+        public void AddLogo(object param)
+        {
+            var Dialog = new OpenFileDialog()
+            {
+                Filter = "Images (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg",
+                FilterIndex = 0
+            };
+            if (Dialog.ShowDialog() != true) { return; }
+            
+            ImageLogo = File.ReadAllBytes(Dialog.FileName);
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(ImageLogo);
+            bitmapImage.EndInit();
+            bitmapImage.Freeze();
+            LogoImageSource = bitmapImage;
+            OnPropertyChanged("LogoImageSource");
+        }
 
         HashSet<int> EditedRowsId = new HashSet<int>();
         private void AttrRowEditEnded(object parameter)
         {
             var row = (parameter as Telerik.Windows.Controls.RadGridView).SelectedItem as Databases.Domains.MasterAttribute;
 
-            if (row.Id > 0)
+            if (row?.Id > 0)
                 EditedRowsId.Add(row.Id.GetValueOrDefault());
             return;
         }

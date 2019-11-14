@@ -8,6 +8,7 @@
         xmlns:mahapps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:ext="clr-namespace:GyanGunj.ControlExtensions"
         xmlns:common="clr-namespace:GyanGunj.Common"
+        xmlns:lmscontrols="clr-namespace:GyanGunj.LmsControls"
         mc:Ignorable="d"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="3 3 3 3"
@@ -25,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0">
@@ -35,7 +37,7 @@
             </StackPanel>
         </DockPanel>
 
-        <Grid Grid.Row="1" Margin="10">
+        <Grid x:Name="DataWindow" Visibility="{Binding DataWindowVisibility}" Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto"/>
@@ -55,7 +57,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-
             <Label Grid.Row="0" Grid.Column="0" 
                    VerticalAlignment="Center">
                 <TextBlock>
@@ -65,7 +66,7 @@
                     </InlineUIContainer>
                 </TextBlock>
             </Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" x:Name="LibName"
+            <lmscontrols:LmsTextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" x:Name="LibName"
                      mahapps:TextBoxHelper.Watermark="Enter Library Name"
                      CharacterCasing="Upper"
                      Width="673" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="18"
@@ -75,7 +76,7 @@
             <Label Grid.Row="1" Grid.Column="0" 
                    VerticalAlignment="Top"
                    Content="Address" FontWeight="Bold"/>
-            <TextBox Grid.Row="1" Grid.Column="1" x:Name="Address"
+            <lmscontrols:LmsTextBox Grid.Row="1" Grid.Column="1" x:Name="Address"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter Adress" AcceptsReturn="True" Height="60"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14" VerticalContentAlignment="Top"
@@ -86,7 +87,7 @@
                    VerticalAlignment="Center"
                    Content="Country" FontWeight="Bold"/>
             <ComboBox Grid.Row="2" Grid.Column="1" x:Name="Country"
-                      Margin="0 5" VerticalAlignment="Center" FontSize="16" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select Country"
+                      Margin="0 5" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Center" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select Country"
                       ItemsSource="{Binding Countries}"
                       SelectedItem="{Binding Country,Mode=TwoWay}"
                       SelectedIndex="0"
@@ -96,7 +97,7 @@
                    VerticalAlignment="Center"
                    Content="State" FontWeight="Bold"/>
             <ComboBox Grid.Row="3" Grid.Column="1" x:Name="State"
-                      Margin="0 5" VerticalAlignment="Center" FontSize="16" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select State"
+                      Margin="0 5" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Center" Width="250" HorizontalAlignment="Left" mahapps:TextBoxHelper.Watermark="Select State"
                       ItemsSource="{Binding States}"
                       SelectedIndex="0"
                       SelectedItem="{Binding State,Mode=TwoWay}"
@@ -112,7 +113,7 @@
                     </InlineUIContainer>
                 </TextBlock>
             </Label>
-            <TextBox Grid.Row="4" Grid.Column="1" x:Name="City"
+            <lmscontrols:LmsTextBox Grid.Row="4" Grid.Column="1" x:Name="City"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter City"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -122,7 +123,7 @@
             <Label Grid.Row="5" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Content="PinCode" FontWeight="Bold"/>
-            <TextBox Grid.Row="5" Grid.Column="1" x:Name="PinCode"
+            <lmscontrols:LmsTextBox Grid.Row="5" Grid.Column="1" x:Name="PinCode"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter PinCode"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -132,7 +133,7 @@
             <Label Grid.Row="6" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Content="Phone" FontWeight="Bold"/>
-            <TextBox Grid.Row="6" Grid.Column="1" x:Name="Phone"
+            <lmscontrols:LmsTextBox Grid.Row="6" Grid.Column="1" x:Name="Phone"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter Phone Number" TextWrapping="Wrap"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -142,7 +143,7 @@
             <Label Grid.Row="7" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Content="Mobile" FontWeight="Bold"/>
-            <TextBox Grid.Row="7" Grid.Column="1" x:Name="Mobile"
+            <lmscontrols:LmsTextBox Grid.Row="7" Grid.Column="1" x:Name="Mobile"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter Mobile Number" TextWrapping="Wrap"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -152,7 +153,7 @@
             <Label Grid.Row="8" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Content="Email" FontWeight="Bold"/>
-            <TextBox Grid.Row="8" Grid.Column="1" x:Name="Email"
+            <lmscontrols:LmsTextBox Grid.Row="8" Grid.Column="1" x:Name="Email"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter Email Address" TextWrapping="Wrap"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -162,7 +163,7 @@
             <Label Grid.Row="9" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Content="WebSite" FontWeight="Bold"/>
-            <TextBox Grid.Row="9" Grid.Column="1" x:Name="WebSite"
+            <lmscontrols:LmsTextBox Grid.Row="9" Grid.Column="1" x:Name="WebSite"
                      CharacterCasing="Upper"
                      mahapps:TextBoxHelper.Watermark="Enter WebSite Address" TextWrapping="Wrap"
                      Width="250" Margin="0 5" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="14"
@@ -193,26 +194,66 @@
                     </telerik:EventToCommandBehavior.EventBindings>
                 </telerik:RadGridView>
             </StackPanel>
+        </Grid>
+        <Grid x:Name="LogoWindow" Visibility="{Binding LogoWindowVisibility}" Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <telerik:Label Content="Add Library Logo (optional)" FontSize="18" FontWeight="Bold"/>
+            <Border Margin="0 20 0 0" BorderBrush="#ddd" Width="270" Height="250" BorderThickness="2" CornerRadius="0" Grid.Row="1" Background="#FFF">
+                <Image Source="{Binding LogoImageSource}" 
+                   Width="200"/>
+            </Border>
+            <StackPanel Grid.Row="2">
+            <Button Margin="5" 
+                        FontSize="12" Width="270" Padding="2" BorderBrush="#DDD" BorderThickness="2"
+                        mahapps:ButtonHelper.CornerRadius="0"
+                        Command="{Binding AddLogoCommand}"
+                        Content="ADD / CHANGE"/>
+                <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold">
+                    <TextBlock>
+                    <InlineUIContainer>
+                        <TextBlock Text="*" Foreground="Red"/>
+                    </InlineUIContainer>
+                    <Run Text="Recommended Ratio of Image 1:1(Square)" FontWeight="Bold"/>
+                </TextBlock>
+                </Label>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="AdminWindow" Visibility="{Binding AdminWindowVisibility}" Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <telerik:Label Content="Add Library Admin"/>
+        </Grid>
+        
+        <StackPanel Grid.Row="2" Margin="0 0 0 10" HorizontalAlignment="Right" Orientation="Horizontal" >
 
-
-            <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3"
-                        Margin="0 20 0 0" HorizontalAlignment="Right" Orientation="Horizontal" >
-
-                <Button Margin="8 0"
+            <Button Margin="0"
+                        FontSize="12" Width="89" Padding="2" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
+                        mahapps:ButtonHelper.CornerRadius="0"
+                        Command="{Binding PreviousCommand}"
+                        Content="PREVIOUS"/>
+            
+            <Button Margin="8 0"
                         FontSize="12" Width="89" Padding="2" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
                         mahapps:ButtonHelper.CornerRadius="0"
                         Command="{Binding SaveCommand}"
-                        Content="SAVE"/>
+                        CommandParameter="{Binding ElementName=CurrentWindow}"
+                        Content="{Binding SaveButtonContent}"/>
 
-                <Button Margin="0 0 8 0"
+            <Button Margin="0 0 8 0"
                         FontSize="12" Width="89" Padding="5" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
                         mahapps:ButtonHelper.CornerRadius="0"
                         Command="{Binding CancelCommand}"
                         CommandParameter="{Binding ElementName=CurrentWindow}"
                         Content="Cancel" />
-        
-            </StackPanel>
 
-        </Grid>
+        </StackPanel>
     </Grid>
 </Window>

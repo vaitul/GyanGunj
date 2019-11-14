@@ -47,13 +47,19 @@ namespace GyanGunj
 
             if (!IsMasterDBExist || (IsMasterDBExist && Globals.MasterDatabase.Library == null) || true)
             {
+                var service = Context.Resolve<IUserService>();
+                service.Insert(new Databases.Domains.User()
+                {
+                    Username = "VaitulB",
+                    Password = "bvb.1260",
+                    Name = "Vaitul Bhayani"
+                });
+                var list = service.GetAll().ToList();
                 var FirmDialog = new EditLibearyFirmDialog();
                 FirmDialog.WindowStyle = WindowStyle.None;
                 FirmDialog.ShowInTaskbar = false;
                 FirmDialog.ShowDialog();
             }
-
-
             Statusbar.Text = "Ready.";
         }
 

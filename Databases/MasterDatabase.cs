@@ -16,6 +16,7 @@ namespace Databases
 
         private SQLiteConnection Connection;
         private string DataBase { get { return "GyanGunj.db"; } }
+        private string Password = "gglms.1260";
         public bool IsExist { get { return File.Exists(DataBase); } }
 
         #endregion
@@ -64,7 +65,8 @@ namespace Databases
 
         public MasterDatabase()
         {
-            Connection = new SQLiteConnection("Data Source=" + DataBase + ";Version=3;New=True;Compress=True;Convert Zero Datetime=True;");
+            Connection = new SQLiteConnection("Data Source=" + DataBase + ";Version=3;New=True;Compress=True;Convert Zero Datetime=True;Password="+Password+";");
+            Connection.SetPassword(Password);
 
             Fill();
         }
