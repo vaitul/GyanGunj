@@ -33,7 +33,7 @@
                 <RowDefinition />
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Source="/Images/Logo_Medium.png" Margin="0"/>
+            <Image Grid.Row="0" Source="pack://application:,,,/Images/Logo_Medium.png" Margin="0"/>
 
             <StackPanel Grid.Row="1" VerticalAlignment="Center">
                 <ComboBox x:Name="Users" Width="250" Height="25" Margin="0 5" telerik:StyleManager.Theme="Fluent" Background="Transparent" BorderBrush="#CCC">

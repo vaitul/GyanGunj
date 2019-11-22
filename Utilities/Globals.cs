@@ -2,6 +2,7 @@
 using Databases.Domains;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,18 @@ namespace Utilities
                     _CurrentUser = value;
             }
         }
+        public static string FirmLogoSource
+        {
+            get 
+            {
+                string path = AppDomain.CurrentDomain.BaseDirectory+"Images\\Logo_only_Large.png";
+                var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "Images");
+                if (dir.GetFiles("FirmLogo.*").Length > 0)
+                    path = dir.GetFiles("FirmLogo.*").First().FullName;
+                return path; 
+            }
+        }
+
 
         private static MasterDatabase _MasterDatabase;
         public static MasterDatabase MasterDatabase

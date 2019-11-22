@@ -44,7 +44,7 @@ namespace GyanGunj.ViewModels
             this.Attributes.CollectionChanged += Attributes_CollectionChanged;
 
             this._SaveCommand = new DelegateCommand(Save);
-            this._PreviousCommand = new DelegateCommand(Previous,CanPreviousExecue);
+            this._PreviousCommand = new DelegateCommand(Previous, CanPreviousExecue);
             this._CancelCommand = new DelegateCommand(Cancel, CanCancelExecue);
             this._AttrRowEditingEndedCommand = new DelegateCommand(AttrRowEditEnded);
             this._AddLogoCommand = new DelegateCommand(AddLogo);
@@ -52,7 +52,7 @@ namespace GyanGunj.ViewModels
             this.DialogMode = dialogMode;
             this.ActiveWindow = Windows.DataWindow;
 
-            //LogoImageSource = new ImageSource("/Images/Logo_Only_Large.png");
+            PlotLogo(Globals.FirmLogoSource);
 
             //exteranl things
             this.Countries = new List<string>() { "INDIA" };
@@ -111,14 +111,6 @@ namespace GyanGunj.ViewModels
         #endregion
 
         #region Properties
-
-        private Byte[] _ImageLogo;
-        public Byte[] ImageLogo
-        {
-            get { return _ImageLogo; }
-            set { _ImageLogo = value; }
-        }
-
 
         public DialogModes DialogMode { get; set; }
 
@@ -284,7 +276,7 @@ namespace GyanGunj.ViewModels
                 }
             }
         }
-        
+
         private bool CanPreviousExecue(object obj)
         {
             return ActiveWindow != Windows.DataWindow;
@@ -294,6 +286,8 @@ namespace GyanGunj.ViewModels
             ActiveWindow -= 1;
         }
 
+        private bool IsNewLogo = false;
+        private string NewLogoPath = null;
         public void Save(object parameter)
         {
             if (this.Validate())
@@ -320,6 +314,22 @@ namespace GyanGunj.ViewModels
                 }
                 if (parameter is EditLibearyFirmDialog control)
                     control.Close();
+
+                if (IsNewLogo && !string.IsNullOrEmpty(NewLogoPath))
+                {
+                    var tmpArray = NewLogoPath.Split('.');
+                    if (tmpArray.Length > 1)
+                    {
+                        string ext = tmpArray[tmpArray.Length - 1];
+                        var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "Images");
+                        var oldLogo = dir.GetFiles("FirmLogo.*");
+                        foreach (var logo in oldLogo)
+                            File.Delete(logo.FullName);
+                        string destinationFile = AppDomain.CurrentDomain.BaseDirectory + "Images\\FirmLogo." + ext;
+                        File.Copy(NewLogoPath, destinationFile, true);
+                    }
+                }
+
             }
         }
         private bool CanCancelExecue(object parameter)
@@ -348,12 +358,16 @@ namespace GyanGunj.ViewModels
                 FilterIndex = 0
             };
             if (Dialog.ShowDialog() != true) { return; }
-            
-            ImageLogo = File.ReadAllBytes(Dialog.FileName);
+            NewLogoPath = Dialog.FileName;
+            PlotLogo(Dialog.FileName);
+            IsNewLogo = true;
+        }
 
+        public void PlotLogo(string path)
+        {
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(ImageLogo);
+            bitmapImage.StreamSource = new MemoryStream(File.ReadAllBytes(path));
             bitmapImage.EndInit();
             bitmapImage.Freeze();
             LogoImageSource = bitmapImage;
